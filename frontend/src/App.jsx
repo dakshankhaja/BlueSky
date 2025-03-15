@@ -1,35 +1,41 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { Route, Routes, useLocation } from 'react-router-dom';
+import SignUpPage from './pages/auth/signup/signUpPage';
+import LoginPage from './pages/auth/login/LoginPage';
+import HomePage from './pages/home/HomePage';
+import Sidebar from './components/common/Sidebar';
+import RightPanel from './components/common/RightPanel';
+import Posts from './components/common/Posts';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const location = useLocation();
+  const isAuthPage = ['/login', '/signup'].includes(location.pathname);
+
+  if (isAuthPage) {
+    return (
+      <div className='min-h-screen flex items-center justify-center bg-black'>
+        <Routes>
+          <Route path='/login' element={<LoginPage />} />
+          <Route path='/signup' element={<SignUpPage />} />
+        </Routes>
+      </div>
+    );
+  }
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <div className='min-h-screen bg-black text-white'>
+      <div className='flex max-w-7xl mx-auto'>
+        <Sidebar />
+        <main className='flex-1'>
+          <Routes>
+            <Route path='/' element={<Posts />} />
+            {/* Add more routes here */}
+          </Routes>
+        </main>
+        <RightPanel />
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    </div>
+  );
 }
 
-export default App
+export default App;
